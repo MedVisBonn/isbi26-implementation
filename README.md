@@ -3,7 +3,7 @@
 Quality control (QC) experiments for segmentation reliability. This repo trains UNet models, trains score predictors for QC, and evaluates multiple QC baselines (score-agreement, Mahalanobis, and predictive-entropy) with a shared analysis notebook.
 
 ## Project layout
-- [src/model](src/model)
+- models
 	- [src/model/unet](src/model/unet) - U-Net models.
 	- [src/model/score_predictor](src/model/score_adapter) - score prediction implementation.
 	- [src/model/mahalanobis](src/model/mahalanobis) - Mahalanobis distance model.
@@ -22,7 +22,6 @@ UNet training and eval:
 
 Score predictor training and eval (Beta$_{\mu,\kappa}$ QC head on top of UNet):
 - [src/apps/train_score_predictor.sh](src/apps/train_score_predictor.sh)
-- [src/apps/train_score_predictor.py](src/apps/train_score_predictor.py)
 
 ## Evaluation baselines
 These scripts compute QC signals and save them into results files for later aggregation:
