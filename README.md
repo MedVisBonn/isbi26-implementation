@@ -3,20 +3,24 @@
 Quality control (QC) experiments for segmentation reliability. This repo trains UNet models, trains score predictors for QC, and evaluates multiple QC baselines (score-agreement, Mahalanobis, and predictive-entropy) with a shared analysis notebook.
 
 ## Project layout
-- [src/apps](src/apps) — training and evaluation entrypoints.
-- [src/notebooks/QC_eval.ipynb](src/notebooks/QC_eval.ipynb) — QC analysis (ranking and risk-control).
-- [src/notebooks/unet_eval_auto_vis.ipynb](src/notebooks/unet_eval_auto_vis.ipynb) — UNet eval aggregation and visualization notebook.
-- [results/](results/) — saved outputs (per-dataset/split/method runs).
-- [pre-trained/](pre-trained/) — pretrained checkpoints.
+- [src/model](src/model)
+	- [src/model/unet](src/model/unet) - U-Net models.
+	- [src/model/score_predictor](src/model/score_adapter) - score prediction implementation.
+	- [src/model/mahalanobis](src/model/mahalanobis) - Mahalanobis distance model.
+	- [src/model/calibration](src/model/calibration) - calibration utilities.
+- [src/apps](src/apps) - training and evaluation entrypoints.
+- [src/notebooks](src/notebooks) - evaluation notebooks.
+- [results/](results/) - saved outputs (per-dataset/split/method runs).
+- [pre-trained/](pre-trained/) - pretrained checkpoints.
 
 ## Installation
 TODO
 
-## Training
-UNet training:
+## Training 
+UNet training and eval:
 - [src/apps/train_unet_per_split.sh](src/apps/train_unet_per_split.sh)
 
-Score predictor training (Beta$_{\mu,\kappa}$ QC head on top of UNet):
+Score predictor training and eval (Beta$_{\mu,\kappa}$ QC head on top of UNet):
 - [src/apps/train_score_predictor.sh](src/apps/train_score_predictor.sh)
 - [src/apps/train_score_predictor.py](src/apps/train_score_predictor.py)
 
@@ -32,7 +36,7 @@ QC analysis workflow is in [src/notebooks/QC_eval.ipynb](src/notebooks/QC_eval.i
 - Fits calibrators (thresholding for correlation-based methods; beta adapters for beta-based predictors).
 - Computes ranking metrics (Pearson’s $\rho$, MAE, eAURC) and risk-control metrics (Rec<sup>+</sup> / Rec<sup>-</sup> at t=0.8, α=0.95).
 
-UNet evaluation aggregation and visualization is in [src/notebooks/unet_eval.ipynb](src/notebooks/unet_eval.ipynb).
+UNet evaluation is in [src/notebooks/unet_eval.ipynb](src/notebooks/unet_eval.ipynb).
 
 ## Notes
 - Results are organized by dataset, split, method, and run ID under [results/](results/).
