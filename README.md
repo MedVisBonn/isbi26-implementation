@@ -32,7 +32,7 @@ QC analysis workflow is in [src/notebooks/QC_eval.ipynb](src/notebooks/QC_eval.i
 - Fits calibrators (thresholding for correlation-based methods; beta adapters for beta-based predictors).
 - Computes ranking metrics (Pearson’s $\rho$, MAE, eAURC) and risk-control metrics (Rec<sup>+</sup> / Rec<sup>-</sup> at t=0.8, α=0.95).
 
-TODO: UNet evaluation aggregation and visualization is in [src/notebooks/unet_eval_auto_vis.ipynb](src/notebooks/unet_eval_auto_vis.ipynb).
+UNet evaluation aggregation and visualization is in [src/notebooks/unet_eval.ipynb](src/notebooks/unet_eval.ipynb).
 
 ## Notes
 - Results are organized by dataset, split, method, and run ID under [results/](results/).
