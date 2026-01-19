@@ -1,0 +1,20 @@
+root_dir: '../../'
+ckpt_dir: 'pre-trained/score-predictors/'
+# ckpt_name: 'mnmv2-siemens-global_transforms-09-48_12-12-2024_adversarial.ckpt'
+limit_train_batches: 100
+max_epochs: 150
+# early_stopping:
+#   # monitor: 'unet_adv_vs_predictor_adv'
+#   monitor: 'val_loss'
+#   mode: 'min'
+model_checkpoint:
+  save_top_k: 1
+  dirpath: 'pre-trained/score-predictors'
+  # monitor: 'epoch'
+  # mode: 'max'
+  # monitor: 'unet_adv_vs_predictor_adv'
+  monitor: 'val_loss'
+  mode: 'min'
+logging: True
+finetune: False
+enable_train_loss_ckpt: True  # toggle additional train-loss checkpoint

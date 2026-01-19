@@ -1,0 +1,11 @@
+dataset: 'pmri'
+data_dir: "../../../../../data/brats2019/"
+domain: 'HGG'
+dist: 'all'
+batch_size: 32
+train_transforms: 'global_transforms'
+input_shape: [1, 4, 240, 240]
+non_empty_target: True
+normalize: True
+input_modalities: ['t1', 't1ce', 'flair', 't2']
+non_empty_target: True

@@ -1,0 +1,21 @@
+# variables effected by dataset
+out_channels: 4
+checkpoint_dir: pre-trained/monai-unets/
+checkpoint_path: "" 
+
+# variables not effected by dataset
+n_filters_init: 32
+depth: 4
+spatial_dims: 2
+in_channels: 1
+num_res_units: 8
+lr: 1e-3
+patience: 5
+norm: instance
+hausdorff_sigma: 1.6761
+dropout: 0.1
+
+# infered
+# channels: [n_filters_init * 2 ** i for i in range(depth)]
+# strides: [2] * (depth - 1)
+# binary_target: True if out_channels == 1 else False

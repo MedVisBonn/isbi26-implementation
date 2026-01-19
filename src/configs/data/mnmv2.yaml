@@ -1,0 +1,9 @@
+dataset: 'mnmv2'   
+data_dir: "../../../../../data/MNM/"
+dist: 'all'
+domain: 'Symphony'
+batch_size: 32
+binary_target: False
+non_empty_target: True
+train_transforms: 'global_transforms'  # 'global_transforms'
+input_shape: [1, 1, 256, 256]

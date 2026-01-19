@@ -1,0 +1,7 @@
+dataset: 'pmri'
+data_dir: "../../../../../data/PMRI/"
+domain: 'RUNMC'
+dist: 'all'
+batch_size: 32
+train_transforms: 'global_transforms'
+input_shape: [1, 1, 384, 384]

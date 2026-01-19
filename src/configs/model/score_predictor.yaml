@@ -1,0 +1,22 @@
+# variables effected by dataset
+adapter_output_dim: 4
+num_classes: 4
+prediction_head_output_dim: 4
+adversarial_skip_epochs: 2      # epochs with zero adversarial perturbations (legacy: warmup_epochs)
+adversarial_warmup_epochs: 0    # epochs of linear ramp for location score target after skip (0 = none)
+
+# variables not effected by dataset
+name: 'None'
+location_target_score_delta: 1
+lr: 0.0000316 #0.0000316
+swivels: 17  # 'all', 'ConfidNet'19
+patience: 20
+loss_fn: 'dice'
+perturbations: 'predictor'  # 'none', 'predictor', 'model', 'both'
+predictor_parameter: 'location'  # 'location', 'concentration', 'location+concentration'
+concentration_target_log_delta: 0.6931471805599453  # ln(2) -> double dispersion
+concentration_controller_gain: 0.1
+min_concentration: 1.0e-6
+# Gap regularization settings
+enable_gap_regularization: False
+gap_reg_weight: 0.5
