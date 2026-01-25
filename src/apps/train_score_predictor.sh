@@ -46,7 +46,7 @@ fi
 
 PREDICTION_HEAD=True
 HIDDEN_DIM=64
-SWIVELS='embedding-last'
+SWIVELS='first-embedding-last'
 CKPT_NAME=''
 
 ITERATIONS='0 1 2 3 4'

@@ -3,6 +3,7 @@ set -euo pipefail
 
 # Train a MONAI U-Net for multiple predefined targets using Hydra defaults.
 # Universal: supports PMRI (iterate canonical splits) and MNMv2 (iterate canonical scenarios).
+# Note: train_unet.py will auto-load an existing checkpoint if one matches dataset+split (+dropout).
 #
 # Environment overrides (optional):
 #   DATASET       pmri | mnmv2 (default pmri)

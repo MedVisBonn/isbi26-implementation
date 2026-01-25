@@ -4,6 +4,7 @@ import hydra
 sys.path.append('../')
 from data_utils import get_data_module
 from model.unet import get_unet_module, get_unet_module_trainer
+from utils import find_unet_checkpoint
 import torch
 import lightning as L
 from pathlib import Path
@@ -35,11 +36,33 @@ def main(cfg):
         cfg=cfg.data
     )
 
-    # init model
+    # init model (load existing checkpoint if available)
+    ckpt_dir = Path(cfg.trainer.model_checkpoint.dirpath)
+    if not ckpt_dir.is_absolute():
+        ckpt_dir = (Path(__file__).resolve().parent / ckpt_dir).resolve()
+
+    ckpt_path = None
+    if split is not None:
+        ckpt_path = find_unet_checkpoint(
+            ckpt_dir,
+            dataset=data_cfg.dataset,
+            split=split,
+            dropout=getattr(cfg.unet, 'dropout', None),
+            newest=True
+        )
+
+    if ckpt_path is not None:
+        cfg.unet.checkpoint_path = str(ckpt_path)
+        load_from_checkpoint = True
+        print(f"[INFO] Found checkpoint: {ckpt_path}")
+    else:
+        load_from_checkpoint = False
+        print(f"[INFO] No checkpoint found in {ckpt_dir}; training from scratch")
+
     model = get_unet_module(
         cfg=cfg.unet,
         metadata=OmegaConf.to_container(cfg),
-        load_from_checkpoint=False
+        load_from_checkpoint=load_from_checkpoint
     )
 
     # init trainer
@@ -50,7 +73,8 @@ def main(cfg):
     )
 
     # train
-    trainer.fit(model=model, datamodule=datamodule)
+    if not load_from_checkpoint:
+        trainer.fit(model=model, datamodule=datamodule)
 
 
     datamodule.setup('test')

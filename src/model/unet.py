@@ -32,7 +32,9 @@ import lightning as L
 from lightning.pytorch.loggers import WandbLogger
 from lightning.pytorch.callbacks import ModelCheckpoint
 from lightning.pytorch.callbacks.early_stopping import EarlyStopping
+from torchmetrics.classification import MulticlassCalibrationError, BinaryCalibrationError
 import surface_distance as sd
+
 from utils import build_checkpoint_filename
 
 
@@ -154,6 +156,20 @@ class LightningSegmentationModel(L.LightningModule):
             num_classes = self.metadata['unet']['out_channels']
         self.sdsc = SurfaceDiceMetric(include_background=False, class_thresholds=(num_classes-1)*[3], reduction="none")
 
+        self.binary_ece = BinaryCalibrationError(
+            n_bins=15,
+            norm="l1",
+            ignore_index=None,   # set to 0/1 only if you truly want to drop a label value
+        )
+        self.multiclass_ece = MulticlassCalibrationError(
+            num_classes=num_classes,
+            n_bins=15,
+            norm="l1",
+            ignore_index=0,      # drop background pixels from ECE
+            validate_args=False, # optional speed
+        )
+
+
     def forward(self, inputs):        
         return self.model(inputs)
     
@@ -237,10 +253,12 @@ class LightningSegmentationModel(L.LightningModule):
         if num_classes > 2:
             probs = torch.softmax(outputs, 1).detach()
             outputs = outputs.argmax(dim=1, keepdim=True).detach()
+            ece = self.multiclass_ece(probs, target).detach().nanmean(-1).nan_to_num(0).cpu()
+
         else:
             probs = outputs.sigmoid().detach()
             outputs = (outputs > 0).long().detach()
-
+            ece = self.binary_ece(probs, target).detach().nanmean(-1).nan_to_num(0).cpu()
 
         predicted_segmentation = one_hot(outputs.squeeze(1), num_classes=num_classes).moveaxis(-1, 1)
         target_segmentation = one_hot(target.squeeze(1), num_classes=num_classes).moveaxis(-1, 1)
@@ -260,7 +278,8 @@ class LightningSegmentationModel(L.LightningModule):
             'loss': loss.cpu().detach(),
             # 'hausdorff': hausdorff,
             'surface_dice': surface_dice,
-            'entropy': entropy.cpu().detach()
+            'entropy': entropy.cpu().detach(),
+            'ece': ece
         }
 
         return metrics
